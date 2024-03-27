@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
   <div class="main-container">
     <div class="box">
@@ -16,9 +13,7 @@
       <TopTen />
     </div>
     <div class="box">
-      <!-- 3 dropdownlist -->
-      
-
+      <v-btn color="primary">Hello, world!</v-btn>
     </div>
     <div class="box">
       <HalfDoughnut />
@@ -34,6 +29,9 @@ import HalfDoughnut from './components/HalfDoughnut.vue';
 export default {
   name: 'App',
   components: { BarChart, TopTen, HalfDoughnut },
+  data: () => ({
+    //
+  }),
 }
 </script>
 
