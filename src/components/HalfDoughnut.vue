@@ -30,24 +30,18 @@ export default {
         },
       },
       chartData: {
-        labels: ['Data 1', 'Data 2', 'Data 3', 'Data 4', 'Data 5'],
+        labels: ['Data 1', 'Data 2'],
         datasets: [
           {
             label: 'My Dataset',
-            data: [44, 55, 41, 17, 15],
+            data: [44, 55],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
             ],
             borderWidth: 1, // Adjust border width as needed
           },
