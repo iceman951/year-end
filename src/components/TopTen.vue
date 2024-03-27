@@ -1,9 +1,9 @@
 <template>
   <div class="top-10-container">
-    <h2>Leaderboard</h2>
+    <h3>ผลการปิดงานประจำวัน 10 อันดับแรก</h3>
     <ul class="rank-list">
-      <li v-for="item in top10" :key="item.brn_code">
-        {{ item.brn_name }} - {{ item.prv }}
+      <li v-for="(item, index) in top10" :key="item.brn_code">
+        {{ index + 1 }}. {{ item.brn_name }} - {{ item.prv }}
       </li>
     </ul>
   </div>
@@ -25,8 +25,9 @@
 }
 
 .rank-list li {
+  margin-top: 2px;
   margin-bottom: 5px;
-  font-weight: bold;
+  font-size: 14px;
 }
 </style>
 
@@ -34,7 +35,6 @@
 const api = 'http://localhost:3000/api/top10'
 export default {
   name: 'Topten',
-  // components: { Topten },
   data() {
     return {
       top10: [],

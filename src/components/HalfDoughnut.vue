@@ -14,8 +14,40 @@ ChartJS.register(ArcElement, Tooltip, Legend); // Register necessary Chart.js co
 export default {
   name: 'DoughnutChart', // Descriptive component name
   components: { Bar },
+  methods: {
+    async fetchBranchListByCloseStatus(status) {
+      await fetch(`http://localhost:3000/api/branch/close/${status}`)
+        .then(response => response.json())
+        .then(data => {
+          if (status === '1') {
+            this.list_close_branch = data;
+            this.count_list_close_branch = this.list_close_branch.length;
+            console.log('ice', this.count_list_close_branch)
+          } else if (status === '0') {
+            this.list_open_branch = data;
+            this.count_list_open_branch = this.list_open_branch.length;
+            console.log('ice No', this.count_list_open_branch)
+          }
+        });
+    },
+  },
+  async mounted() {
+    await this.fetchBranchListByCloseStatus("1")
+    await this.fetchBranchListByCloseStatus("0");
+
+  },
+  async created() {
+    console.log("created")
+    await this.fetchBranchListByCloseStatus("1")
+    await this.fetchBranchListByCloseStatus("0");
+  },
   data() {
+
     return {
+      list_open_branch: [],
+      list_close_branch: [],
+      count_list_open_branch: 0,
+      count_list_close_branch: 0,
       chartOptions: {
         responsive: false, // Ensure responsiveness across devices
         maintainAspectRatio: false, // Prevent unwanted stretching
@@ -30,11 +62,11 @@ export default {
         },
       },
       chartData: {
-        labels: ['Data 1', 'Data 2'],
+        labels: ['จำนวนสาขาที่ปิดบัญชี', 'จำนวนสาขาที่ยังไม่ปิดบัญชี'],
         datasets: [
           {
             label: 'My Dataset',
-            data: [44, 55],
+            data: [50, ],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -43,7 +75,7 @@ export default {
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
             ],
-            borderWidth: 1, // Adjust border width as needed
+            borderWidth: 1,
           },
         ],
       },

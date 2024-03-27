@@ -1,32 +1,43 @@
 <template>
+
+  <v-toolbar class="navbar">
+    <v-spacer></v-spacer>
+    <v-toolbar-title>รายงานผลการปิดบัญชีประจำปี 2566</v-toolbar-title>
+    <v-spacer></v-spacer>
+  </v-toolbar>
+
   <div class="main-container">
     <div class="box">
-      <div id="provChartId">
-        <apexchart type="bar" height="350" :options="branchChartOptions" :series="branchSeries"></apexchart>
-      </div>
-    </div>
-    <div class="box">
       <div id="divisionChartId">
-        <apexchart type="bar" height="350" :options="divisionChartOptions" :series="divisionSeries"></apexchart>
+        <apexchart type="bar" height="500" width="435" :options="divisionChartOptions" :series="divisionSeries">
+        </apexchart>
       </div>
     </div>
     <div class="box">
       <div id="provChartId">
-        <apexchart type="bar" height="350" :options="provChartOptions" :series="provSeries"></apexchart>
+        <apexchart type="bar" height="500" width="435" :options="provChartOptions" :series="provSeries"></apexchart>
       </div>
+    </div>
+    <div class="box">
+      <div id="provChartId">
+        <apexchart type="bar" height="500" width="435" :options="branchChartOptions" :series="branchSeries"></apexchart>
+      </div>
+    </div>
+    <div class="box" style="display: block; padding: 3%">
+      <h4 class="text-left">ฝ่ายกิจการสาขา</h4>
+      <v-select label="Select" v-model="selectedDivision" :items="sname_divs"></v-select>
+      <h4 class="text-left">สนจ.</h4>
+      <v-select label="Select" v-model="selectedProv" :items="prov_names"></v-select>
     </div>
     <div class="box">
       <TopTen />
     </div>
-    <div class="box" style=" display:block">
-      <!-- <div style="display: block; width: auto;"> -->
-      <h4 class="text-left">ฝ่าย</h4>
-      <v-select label="Select" v-model="selectedDivision" :items="sname_divs"></v-select>
-      <h4 class="text-left">สนจ</h4>
-      <v-select label="Select" v-model="selectedProv" :items="prov_names"></v-select>
-    </div>
     <div class="box">
-      <HalfDoughnut />
+      <!-- <HalfDoughnut /> -->
+      <div id="chart">
+        <apexchart type="donut" :options="semiDonutchartOptions" :series="semiDonutSeries"></apexchart>
+      </div>
+
     </div>
   </div>
 </template>
@@ -39,8 +50,46 @@ import VueApexCharts from 'apexcharts'
 
 export default {
   name: 'App',
-  components: { BarChart, TopTen, HalfDoughnut, VueApexCharts },
+  components: { BarChart, TopTen, HalfDoughnut, VueApexCharts, },
   data: () => ({
+
+    semiDonutSeries: [1, 20],
+    semiDonutchartOptions: {
+      chart: {
+        type: 'donut',
+      },
+      labels: ['ปิดแล้ว', 'ยังไม่ปิด'],
+      colors: ['#42b883', '#E91E63'],
+      dataLabels: {
+          formatter: function (val, opts) {
+            return val; // Return the actual value without formatting
+          }
+        },
+      plotOptions: {
+        pie: {
+          startAngle: -90,
+          endAngle: 90,
+          offsetY: 10
+        }
+      },
+      grid: {
+        padding: {
+          bottom: -80
+        }
+      },
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+    },
+
     // labels ========================
     //initial from api
     top10: [],
@@ -49,7 +98,8 @@ export default {
     baac_division: [],
     baac_prov: [],
     baac_branch: [],
-
+    list_close_branch: [],
+    list_open_branch: [],
 
     // provice
     prov_codes: [],
@@ -59,7 +109,7 @@ export default {
     branch_codes: [],
     branch_names: [],
 
-    // dropdownList
+    // dropdownList ====================
     selectedDivision: null,
     selectedProv: null,
 
@@ -75,7 +125,6 @@ export default {
     // bar chart สาขา
     branchChartOptions: null,
     branchSeries: [],
-    // ===============================
 
   }),
   methods: {
@@ -105,12 +154,25 @@ export default {
           this.baac_branch = data;
         });
     },
+    async fetchBranchListByCloseStatus(status) {
+      await fetch(`http://localhost:3000/api/branch/close/${status}`)
+        .then(response => response.json())
+        .then(data => {
+          if (status === '1') {
+            this.list_close_branch = data;
+            this.semiDonutSeries[0] = this.list_close_branch.length;
+          } else if (status === '0') {
+            this.list_open_branch = data;
+            this.semiDonutSeries[1] = this.list_open_branch.length;
+          }
+        });
+    },
     updateProvChart() {
       this.provChartOptions = {
         colors: ['#42b883', '#E91E63'],
         chart: {
           type: 'bar',
-          height: 350,
+          height: 435,
           stacked: true,
         },
         plotOptions: {
@@ -133,7 +195,7 @@ export default {
           colors: ['#fff']
         },
         title: {
-          text: 'ฝ่าย'
+          text: 'สำนักงานจังหวัด'
         },
         xaxis: {
           categories: this.prov_names,
@@ -177,7 +239,7 @@ export default {
         colors: ['#42b883', '#E91E63'],
         chart: {
           type: 'bar',
-          height: 350,
+          height: 435,
           stacked: true,
         },
         plotOptions: {
@@ -215,9 +277,6 @@ export default {
           title: {
             text: undefined
           },
-          noData: {
-            text: 'Loading...'
-          },
           max: 1,
           min: 0
         },
@@ -250,12 +309,14 @@ export default {
 
     // division chart
     await this.fetchBaacDivision();
+    await this.fetchBranchListByCloseStatus("1");
+    await this.fetchBranchListByCloseStatus("0");
 
     this.divisionChartOptions = {
       colors: ['#42b883', '#E91E63'],
       chart: {
         type: 'bar',
-        height: 350,
+        height: 435,
         stacked: true,
       },
       plotOptions: {
@@ -278,7 +339,7 @@ export default {
         colors: ['#fff']
       },
       title: {
-        text: 'ฝ่าย'
+        text: 'ฝ่ายกิจการสาขา'
       },
       xaxis: {
         categories: this.sname_divs,
@@ -321,7 +382,7 @@ export default {
       colors: ['#42b883', '#E91E63'],
       chart: {
         type: 'bar',
-        height: 350,
+        height: 435,
         stacked: true,
       },
       plotOptions: {
@@ -387,7 +448,7 @@ export default {
       colors: ['#42b883', '#E91E63'],
       chart: {
         type: 'bar',
-        height: 350,
+        height: 435,
         stacked: true,
       },
       plotOptions: {
@@ -459,6 +520,10 @@ export default {
         await this.fetchBaacProv(id_div);
         this.selectedProv = null;
         await this.updateProvChart();
+        if (!this.branchChartOptions) {
+          this.branchChartOptions = null;
+          this.branchSeries = []
+        }
       }
     },
     async selectedProv(newValue) {
@@ -474,21 +539,22 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+  background: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+}
+
 .main-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  border: solid 1px #ff0000;
 }
 
 .box {
   background-color: #ffffff;
   display: flex;
-  width: 400px;
-  /* height: 400px; */
+  width: 31%;
   margin: 10px;
   box-sizing: border-box;
-  border: solid 1px #ff0000;
 }
 
 @media (max-width: 768px) {
