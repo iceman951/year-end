@@ -33,16 +33,14 @@
       <TopTen />
     </div>
     <div class="box" style="justify-content: center">
-      <!-- <div id="chart" style=""> -->
-      <!-- <h3 style="margin: 10px;">จำนวนสาขาที่ปิดบัญชี</h3> -->
-      <v-card title="จำนวนสาขาที่ปิดบัญชี" content="fdfd">
+      <v-card title="จำนวนสาขาที่ปิดบัญชี">
         <apexchart type="donut" :options="semiDonutchartOptions" :series="semiDonutSeries"></apexchart>
-        <div style="margin: 10%;">
+        <div style="margin: 2%;">
           <p>ปิดบัญชีแล้วจำนวน {{ list_close_branch.length }} สาขา</p>
           <p>ยังไม่ปิดบัญชีจำนวน {{ list_open_branch.length }} สาขา</p>
+          <p style="opacity: 0;">_____________________________________________________</p>
         </div>
       </v-card>
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -268,17 +266,13 @@ export default {
         xaxis: {
           categories: this.branch_names,
           labels: {
-            formatter: val => {
-              return val
-            }
+            show: false,
           }
         },
         yaxis: {
           title: {
             text: undefined
           },
-          max: 1,
-          min: 0
         },
         tooltip: {
           y: {
@@ -520,10 +514,65 @@ export default {
         await this.fetchBaacProv(id_div);
         this.selectedProv = null;
         await this.updateProvChart();
-        if (!this.branchChartOptions) {
-          this.branchChartOptions = null;
-          this.branchSeries = []
+        this.branchSeries = []
+        this.branchChartOptions = {
+          colors: ['#42b883', '#E91E63'],
+          chart: {
+            type: 'bar',
+            height: 435,
+            stacked: true,
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true,
+              dataLabels: {
+                enabled: false,
+                total: {
+                  enabled: false,
+                  offsetX: 0,
+                  style: {
+                    fontSize: '13px',
+                    fontWeight: 900,
+                  }
+                }
+              }
+            },
+          },
+          stroke: {
+            width: 1,
+            colors: ['#fff']
+          },
+          title: {
+            text: 'สาขา'
+          },
+          xaxis: {
+            categories: [],
+            // labels: {
+            //   show: false,
+            // }
+          },
+          yaxis: {
+            title: {
+              text: undefined
+            },
+          },
+          tooltip: {
+            y: {
+              formatter: val => {
+                return val
+              }
+            }
+          },
+          fill: {
+            opacity: 1
+          },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 40
+          }
         }
+
       }
     },
     async selectedProv(newValue) {
