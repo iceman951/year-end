@@ -300,7 +300,6 @@ export default {
     }
   },
   async created() {
-    console.log('created', `${import.meta.env.VITE_API_URL}`);
 
     // division chart
     await this.fetchBaacDivision();

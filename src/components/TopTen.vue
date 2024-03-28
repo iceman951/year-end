@@ -36,7 +36,7 @@
 </style>
 
 <script>
-const api = 'http://localhost:3000/api/top10'
+const api = `${import.meta.env.VITE_API_URL}/api/top10`
 export default {
   name: 'Topten',
   data() {
