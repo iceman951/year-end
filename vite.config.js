@@ -10,4 +10,5 @@ export default defineConfig({
 		vue(),
 		vuetify({ autoImport: true }),
 	],
+	VITE_API_URL: process.env.VITE_API_URL,
 })
