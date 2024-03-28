@@ -2,6 +2,10 @@
   <div class="top-10-container">
     <h3>ผลการปิดงานประจำวัน 10 อันดับแรก</h3>
     <ul class="rank-list">
+      
+      <p v-if="top10.length === 0" style="margin: 5%; color: brown;">
+        ยังไม่มีสาขาที่ปิดบัญชีในวันนี้
+      </p>
       <li v-for="(item, index) in top10" :key="item.brn_code">
         {{ index + 1 }}. {{ item.brn_name }} - {{ item.prv }}
       </li>
@@ -12,7 +16,7 @@
 <style scoped>
 /* Styles for the top 10 ranks component */
 .top-10-container {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 20px;

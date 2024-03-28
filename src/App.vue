@@ -32,39 +32,37 @@
     <div class="box">
       <TopTen />
     </div>
-    <div class="box">
-      <!-- <HalfDoughnut /> -->
-      <div id="chart">
+    <div class="box" style="justify-content: center">
+      <!-- <div id="chart" style=""> -->
+      <!-- <h3 style="margin: 10px;">จำนวนสาขาที่ปิดบัญชี</h3> -->
+      <v-card title="จำนวนสาขาที่ปิดบัญชี" content="fdfd">
         <apexchart type="donut" :options="semiDonutchartOptions" :series="semiDonutSeries"></apexchart>
-      </div>
-
+        <div style="margin: 10%;">
+          <p>ปิดบัญชีแล้วจำนวน {{ list_close_branch.length }} สาขา</p>
+          <p>ยังไม่ปิดบัญชีจำนวน {{ list_open_branch.length }} สาขา</p>
+        </div>
+      </v-card>
+      <!-- </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import BarChart from './components/BarChart.vue'
 import TopTen from './components/TopTen.vue'
-import HalfDoughnut from './components/HalfDoughnut.vue';
 import VueApexCharts from 'apexcharts'
 
 export default {
   name: 'App',
-  components: { BarChart, TopTen, HalfDoughnut, VueApexCharts, },
+  components: { TopTen, VueApexCharts, },
   data: () => ({
 
-    semiDonutSeries: [1, 20],
+    semiDonutSeries: [1, 1],
     semiDonutchartOptions: {
       chart: {
         type: 'donut',
       },
       labels: ['ปิดแล้ว', 'ยังไม่ปิด'],
       colors: ['#42b883', '#E91E63'],
-      dataLabels: {
-          formatter: function (val, opts) {
-            return val; // Return the actual value without formatting
-          }
-        },
       plotOptions: {
         pie: {
           startAngle: -90,
@@ -161,9 +159,11 @@ export default {
           if (status === '1') {
             this.list_close_branch = data;
             this.semiDonutSeries[0] = this.list_close_branch.length;
+            // this.semiDonutchartOptions.labels[0] = `ปิดแล้ว ${this.list_close_branch.length} สาขา`;
           } else if (status === '0') {
             this.list_open_branch = data;
             this.semiDonutSeries[1] = this.list_open_branch.length;
+            // this.semiDonutchartOptions.labels[1] = `ยังไม่ปิด ${this.list_open_branch.length} สาขา`;
           }
         });
     },
@@ -555,6 +555,7 @@ export default {
   width: 31%;
   margin: 10px;
   box-sizing: border-box;
+  /* justify-content: center; */
 }
 
 @media (max-width: 768px) {
