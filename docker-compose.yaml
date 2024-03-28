@@ -3,7 +3,7 @@ version: "3"
  
 services:
   web:
-    image: web:latest
+    image: loma.app.baac.or.th/year-end/year-end-app:1.0.0
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
