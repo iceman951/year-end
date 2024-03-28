@@ -1,0 +1,19 @@
+#docker compose vuejs
+version: "3"
+ 
+services:
+  web:
+    image: web:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    environment:
+      - VITE_API_URL=api:3000
+      - TZ=Asia/Bangkok
+  api:
+    image: loma.app.baac.or.th/year-end/year-end-api:1.0.0
+    ports:
+      - 3000:3000
+    environment:
+      - TZ=Asia/Bangkok

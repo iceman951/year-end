@@ -125,7 +125,7 @@ export default {
   }),
   methods: {
     async fetchBaacDivision() {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/baac_division`)
+      await fetch(`/api/baac_division`)
         .then(response => response.json())
         .then(data => {
           this.sname_divs = data.map(item => item.sname_div);
@@ -133,7 +133,7 @@ export default {
         });
     },
     async fetchBaacProv(id_div) {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/baac_prov/${id_div}`)
+      await fetch(`/api/baac_prov/${id_div}`)
         .then(response => response.json())
         .then(data => {
           this.prov_codes = data.map(item => item.prov_code);
@@ -142,7 +142,7 @@ export default {
         });
     },
     async fetchBaacBranch(prov_code) {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/baac_branch/${prov_code}`)
+      await fetch(`/api/baac_branch/${prov_code}`)
         .then(response => response.json())
         .then(data => {
           this.branch_codes = data.map(item => item.branch_code);
@@ -151,7 +151,7 @@ export default {
         });
     },
     async fetchBranchListByCloseStatus(status) {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/branch/close/${status}`)
+      await fetch(`/api/branch/close/${status}`)
         .then(response => response.json())
         .then(data => {
           if (status === '1') {

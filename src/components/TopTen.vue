@@ -36,7 +36,7 @@
 </style>
 
 <script>
-const api = `${import.meta.env.VITE_API_URL}/api/top10`
+// const api = `${import.meta.env.VITE_API_URL}/api/top10`
 export default {
   name: 'Topten',
   data() {
@@ -46,7 +46,7 @@ export default {
   },
   async mounted() {
     // Fetch the data from the API
-    await fetch(api)
+    await fetch(`/api/top10`)
       .then(response => {
         return response.json();
       }).then(data => {
