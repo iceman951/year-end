@@ -125,7 +125,7 @@ export default {
   }),
   methods: {
     async fetchBaacDivision() {
-      await fetch('http://localhost:3000/api/baac_division')
+      await fetch(`http://localhost:3000/api/baac_division`)
         .then(response => response.json())
         .then(data => {
           this.sname_divs = data.map(item => item.sname_div);
